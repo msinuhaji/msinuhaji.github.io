@@ -47,6 +47,11 @@ p {
     font-size: 0.9em;
 }
 
+p.subtext {
+    color: rgb(85, 85, 85);
+    font-size: 0.7em;
+}
+
 .page-wrapper {
     display: grid;
     width: 100vw;
@@ -77,14 +82,14 @@ p {
     z-index: -10;
 }
 
-.parallax-img {
+.parallax-img1, .parallax-img2 {
     object-fit: cover; 
     position: absolute; 
     background-color: red;
-    top: -20%; 
+    top: -25%; 
     left: 0;
     z-index: -1;
-    height: 150%; /* Extra height for parallax movement room */
+    height: 160%; /* Extra height for parallax movement room */
     width: 100%;
 }
 
