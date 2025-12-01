@@ -106,10 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         let documentText = [];
 
-        document.querySelectorAll('.mobile-friendly').forEach((element) => {
+        document.querySelectorAll('.mobile-data-div').forEach((element) => {
             documentText.push(element.innerText);
         });
 
-        document.body.innerText = documentText.flat().join('\n');
+        const pagesDiv = document.getElementById('pages');
+        if (pagesDiv) {
+            pagesDiv.innerHTML = '<div style="padding: 20px; font-family: Arial, sans-serif;">' + 
+                documentText.map(text => `<p>${text}</p>`).join('') + 
+                '</div>';
+        }
     }
 });
