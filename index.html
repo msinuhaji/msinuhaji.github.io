@@ -18,7 +18,7 @@
         <!-- page one -->
         <div id='home_page' class="page-wrapper fade" data-fade-sensitivity="1">
             <div style="grid-row: 1/2; grid-column: 1/4;">
-                <h1 class="parallax-front1">HEY, I'M MUSHTHAFA.</h1>
+                <h1 class="parallax-front2">HEY, I'M MUSHTHAFA!</h1>
             </div>
             <div style="grid-row: 4/12; grid-column: 2/5;">
                 <h2 class="parallax-front1">I spent the last two months creating my own <i>artificial intelligence</i>.
@@ -32,15 +32,15 @@
             </div>
             <div class="parallax-behind2"
                 style="grid-row: 1/12; grid-column: 5/11; overflow: hidden; position: relative;">
-                <img class="parallax-img"
+                <img class="parallax-img1"
                     src="https://wallpapers.com/images/high/silly-cat-pictures-1200-x-900-55sismdj8cnvvg3t.webp">
             </div>
             <div style="grid-row: 9/12; grid-column: 11/12;">
                 <nav>
                     <a><b><u>Sections</u></b></a>
-                    <a onclick="navigateToPage('introduction_page')">Introduction</a>
+                    <a onclick="navigateToPage('introduction_page')">Intro</a>
                     <a onclick="navigateToPage('research_page')">Research</a>
-                    <a onclick="navigateToPage('design_page')">Design</a>
+                    <a onclick="navigateToPage('strucutre_page')">Structure</a>
                     <a onclick="navigateToPage('timeline_page')">Timeline</a>
                     <a onclick="navigateToPage('reflection_page')">Reflection</a>
                 </nav>
@@ -68,16 +68,16 @@
                     ask my dad for help (he did his PhD on Neural Networks for Mining Engineering ~15 years ago,
                     although he
                     never finished it).</p>
-                <p>Finally, I decided that I would make an AI that processes images, not some chatbot...</p>
+                <p>In the end, I decided that I would make an AI that processes images, not some chatbot...</p>
             </div>
             <div class="parallax-behind2"
                 style="grid-row: 1/12; grid-column: 1/8; overflow: hidden; position: relative;">
-                <img class="parallax-img"
-                    src="https://wallpapers.com/images/high/silly-cat-pictures-1200-x-900-55sismdj8cnvvg3t.webp">
+                <img class="parallax-img1"
+                    src="https://britishcolumbia.com/wp-content/uploads/2024/11/5c0eb9a0-ebc2-4b01-a516-c1002b169341-scaled.jpeg">
             </div>
         </div>
         <!-- page three -->
-        <div id="research_page" class="page-wrapper fade" data-fade-sensitivity="0.8"
+        <div id="research_page" class="page-wrapper fade" data-fade-sensitivity='1.1'
             style="grid-template-columns: repeat(3, minmax(0, 1fr));">
             <div style="grid-row: 1/3; grid-column: 1/2;">
                 <h1 class="parallax-front1">RESEARCH:</h1>
@@ -96,7 +96,7 @@
             </div>
             <div class="parallax-behind2"
                 style="grid-row: 1/7; grid-column: 2/3; overflow: hidden; position: relative;">
-                <img class="parallax-img"
+                <img class="parallax-img1"
                     src="https://wallpapers.com/images/high/silly-cat-pictures-1200-x-900-55sismdj8cnvvg3t.webp">
             </div>
             <div style="grid-row: 8/12; grid-column: 2/3; overflow:hidden">
@@ -123,25 +123,24 @@
             </div>
             <div class="parallax-behind2"
                 style="grid-row: 6/12; grid-column: 3/4; overflow: hidden; position: relative;">
-                <img class="parallax-img"
+                <img class="parallax-img1"
                     src="https://wallpapers.com/images/high/silly-cat-pictures-1200-x-900-55sismdj8cnvvg3t.webp">
             </div>
         </div>
         <!-- page four -->
-        <div id="design_page" class="page-wrapper fade" data-fade-sensitivity="0.8"
+        <div id="structure_page" class="page-wrapper fade" data-fade-sensitivity='1.1'
             style="grid-template-columns: repeat(6, minmax(0, 1fr));">
             <div class="parallax-behind2"
-                style="grid-row: 1/12; grid-column: 1/5; overflow: hidden; position: relative;">
-                <img class="parallax-img"
-                    src="https://wallpapers.com/images/high/silly-cat-pictures-1200-x-900-55sismdj8cnvvg3t.webp">
+                style="grid-row: 3/12; grid-column: 3/7; overflow: hidden; position: relative;">
+                <img class="parallax-img2" style="filter: grayscale(30%) contrast(70%) brightness(105%);" src="images/CNN Diagram.png">
             </div>
-            <div style="grid-row: 1/3; grid-column: 5/6;">
-                <h1 class="parallax-front1">DESIGN:</h1>
+            <div style="grid-row: 1/2; grid-column: 1/2;">
+                <h1 class="parallax-front1">STRUCTURE:</h1>
             </div>
-            <div style="grid-row: 2/4; grid-column: 6/7;">
+            <div style="grid-row: 2/4; grid-column: 1/3;">
                 <h2 class="parallax-front1">How does it work?</h2>
             </div>
-            <div style="grid-row: 4/12; grid-column: 5/7;">
+            <div style="grid-row: 4/12; grid-column: 1/3;">
                 <p>To understand how my CNN would work, we first have to understand how any Neural Network works:</p>
                 <p>
                     Simply put, a Neural Network is an arrangement of basic processing units, 'Neurons', into layers in
@@ -154,17 +153,33 @@
                 </p>
                 <p>
                     As previously stated, a CNN is a modified Neural Network. The only major difference is that its made
-                    up of three layers, two of which (CL and FCL) being standalone Neural Networks. You can learn more
-                    about CNNs <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network" class="blue-link">here</a>.
+                    up of three layers, two of which (CL and FCL) being standalone Neural Networks. This is shown in the
+                    diagram I made on the right.
                 </p>
+            </div>
+            <div style="grid-row: 1/4; grid-column: 3/4;">
+                <p style="text-align: right;" class="subtext">As seen here in the diagram below, a CNN is comprised of three layers: CL,
+                    Pooling, and FCL.</p>
+            </div>
+            <div style="grid-row: 1/4; grid-column: 4/5;">
+                <p style="text-align: right;" class="subtext">The CL is a modified Neural Network, where each neuron can't see of the
+                    previous layer; this layer specializes in feature extraction.</p>
+            </div>
+            <div style="grid-row: 1/4; grid-column: 5/6;">
+                <p style="text-align: right;" class="subtext">The Pooling Layer
+                    compresses the 3D Tensor for better optimization.</p>
+            </div>
+            <div style="grid-row: 1/4; grid-column: 6/7;">
+                <p style="text-align: right;" class="subtext">The FCL is a normal Neural Network where all of
+                    the previous layer is visible. It's better for classification or detection.</p>
             </div>
         </div>
         <!-- page five -->
-        <div id="timeline_page" class="page-wrapper fade" data-fade-sensitivity="0.8"
+        <div id="timeline_page" class="page-wrapper fade" data-fade-sensitivity='1.1'
             style="grid-template-columns: repeat(6, minmax(0, 1fr));">
             <div class="parallax-behind2"
                 style="grid-row: 1/12; grid-column: 1/5; overflow: hidden; position: relative;">
-                <img class="parallax-img"
+                <img class="parallax-img1"
                     src="https://wallpapers.com/images/high/silly-cat-pictures-1200-x-900-55sismdj8cnvvg3t.webp">
             </div>
             <div style="grid-row: 1/3; grid-column: 5/6;">
@@ -193,11 +208,11 @@
             </div>
         </div>
         <!-- page six -->
-        <div id="reflection_page" class="page-wrapper fade" data-fade-sensitivity="0.8"
+        <div id="reflection_page" class="page-wrapper fade" data-fade-sensitivity='1.1'
             style="grid-template-columns: repeat(6, minmax(0, 1fr));">
             <div class="parallax-behind2"
                 style="grid-row: 1/12; grid-column: 1/5; overflow: hidden; position: relative;">
-                <img class="parallax-img"
+                <img class="parallax-img1"
                     src="https://wallpapers.com/images/high/silly-cat-pictures-1200-x-900-55sismdj8cnvvg3t.webp">
             </div>
             <div style="grid-row: 1/3; grid-column: 5/6;">
@@ -217,7 +232,7 @@
                     If you imagine a graph as a string that bends and twists, a Neural Network would
                     be an approximation of that string, with the Neurons doing the bending and twisting.
                 </p>
-                
+
             </div>
         </div>
     </div>
