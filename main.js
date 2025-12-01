@@ -5,8 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let desiredScroll = currentScroll;
 
     const parallaxConfig = [
-        { sel: '.parallax-img', spd: 0.3 },
-        { sel: '.parallax-front1', spd: -0.2 },
+        { sel: '.parallax-img1', spd: 0.2 },
+        { sel: '.parallax-img2', spd: 0.1 },
+        { sel: '.parallax-front1', spd: -0.1 },
+        { sel: '.parallax-front2', spd: -0.3 },
         { sel: '.parallax-behind1', spd: 0.7 },
         { sel: '.parallax-behind2', spd: 0.1 }
     ];
