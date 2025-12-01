@@ -1,87 +1,115 @@
 const LERP = (s, e, a) => s + (e - s) * a;
 
+function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    let currentScroll = window.pageYOffset;
-    let desiredScroll = currentScroll;
+    if (!isMobile()) {
+        let currentScroll = window.pageYOffset;
+        let desiredScroll = currentScroll;
+        let lastScroll = currentScroll;
 
-    const parallaxConfig = [
-        { sel: '.parallax-img1', spd: 0.2 },
-        { sel: '.parallax-img2', spd: 0.1 },
-        { sel: '.parallax-front1', spd: -0.1 },
-        { sel: '.parallax-front2', spd: -0.3 },
-        { sel: '.parallax-behind1', spd: 0.7 },
-        { sel: '.parallax-behind2', spd: 0.1 }
-    ];
+        const parallaxConfig = [
+            { sel: '.parallax-img1', spd: 0.2 },
+            { sel: '.parallax-img2', spd: 0.1 },
+            { sel: '.parallax-front1', spd: -0.1 },
+            { sel: '.parallax-front2', spd: -0.3 },
+            { sel: '.parallax-behind1', spd: 0.7 },
+            { sel: '.parallax-behind2', spd: 0.1 }
+        ];
 
-    window.navigateToPage = (id) => {
-        const el = document.getElementById(id);
-        if (el) desiredScroll = el.offsetTop;
-    };
+        window.navigateToPage = (id) => {
+            const el = document.getElementById(id);
+            if (el) desiredScroll = el.offsetTop;
+        };
 
-    // Cache page data
-    const pages = [];
-    const fadeEls = [];
+        // Cache page data
+        const pages = [];
+        const fadeEls = [];
 
-    document.querySelectorAll('.page-wrapper').forEach(page => {
-        const els = [];
-        parallaxConfig.forEach(({ sel, spd }) => {
-            page.querySelectorAll(sel).forEach(el => els.push({ el, spd }));
-        });
-
-        pages.push({
-            page,
-            els,
-            getCenter: () => page.offsetTop + page.offsetHeight / 2
-        });
-
-        const pageScrollDiv = document.getElementById('scrollContent').appendChild(document.createElement('div'));
-        pageScrollDiv.innerText = page.id;
-
-        // Cache fade elements
-        const sens = parseFloat(page.dataset.fadeSensitivity) || 1;
-        fadeEls.push({ el: page, sens });
-    });
-
-    const vh = window.innerHeight;
-    const vhHalf = vh / 2;
-
-    window.addEventListener('wheel', e => {
-        e.preventDefault();
-        desiredScroll = Math.max(0, Math.min(
-            desiredScroll + e.deltaY,
-            document.body.scrollHeight - vh
-        ));
-    }, { passive: false });
-
-    // Animation loop
-    const update = () => {
-        currentScroll = LERP(currentScroll, desiredScroll, 0.07);
-        window.scrollTo(0, currentScroll);
-
-        const viewCenter = currentScroll + vhHalf;
-
-        // Parallax
-        pages.forEach(({ els, getCenter }) => {
-            const scroll = viewCenter - getCenter();
-            els.forEach(({ el, spd }) => {
-                el.style.transform = `translateY(${scroll * spd}px)`;
+        document.querySelectorAll('.page-wrapper').forEach(page => {
+            const els = [];
+            parallaxConfig.forEach(({ sel, spd }) => {
+                page.querySelectorAll(sel).forEach(el => els.push({ el, spd }));
             });
+
+            pages.push({
+                page,
+                els,
+                getCenter: () => page.offsetTop + page.offsetHeight / 2
+            });
+
+            const pageScrollDiv = document.getElementById('scrollContent').appendChild(document.createElement('div'));
+            pageScrollDiv.innerText = page.id;
+
+            // Cache fade elements
+            const sens = parseFloat(page.dataset.fadeSensitivity) || 1;
+            const snapDist = parseFloat(page.dataset.snapDistance) || 0;
+            fadeEls.push({ el: page, sens, snapDist, offsetTop: page.offsetTop });
         });
 
-        // Fade
-        fadeEls.forEach(({ el, sens }) => {
-            const rect = el.getBoundingClientRect();
-            const dist = Math.abs((rect.top + rect.bottom) / 2 - vhHalf);
-            el.style.opacity = Math.max(0, 1 - dist / (vh / sens));
+        const vh = window.innerHeight;
+        const vhHalf = vh / 2;
+        const snapSpeedThreshold = 0.005; // pixels per frame
+
+        window.addEventListener('wheel', e => {
+            e.preventDefault();
+            desiredScroll = Math.max(0, Math.min(
+                desiredScroll + e.deltaY,
+                document.body.scrollHeight - vh
+            ));
+        }, { passive: false });
+
+        // Animation loop
+        const update = () => {
+            currentScroll = LERP(currentScroll, desiredScroll, 0.05);
+            window.scrollTo(0, currentScroll);
+
+            const scrollSpeed = Math.abs(currentScroll - lastScroll);
+            lastScroll = currentScroll;
+
+            const viewCenter = currentScroll + vhHalf;
+
+            // Parallax
+            pages.forEach(({ els, getCenter }) => {
+                const scroll = viewCenter - getCenter();
+                els.forEach(({ el, spd }) => {
+                    el.style.transform = `translateY(${scroll * spd}px)`;
+                });
+            });
+
+            // Fade & Snap
+            fadeEls.forEach(({ el, sens, snapDist, offsetTop }) => {
+                const rect = el.getBoundingClientRect();
+                const dist = Math.abs((rect.top + rect.bottom) / 2 - vhHalf);
+                el.style.opacity = Math.max(0, 1 - dist / (vh / sens));
+
+                // Snap to section if within snap distance and moving slowly
+                if (snapDist > 0 && scrollSpeed < snapSpeedThreshold) {
+                    const distToSection = Math.abs(currentScroll - offsetTop);
+                    if (distToSection < snapDist) {
+                        desiredScroll = offsetTop;
+                    }
+                }
+            });
+
+            const contentHeight = document.getElementById('scrollContent').scrollHeight;
+            const maxScroll = document.documentElement.scrollHeight;
+
+            document.getElementById('scrollContent').style.transform = `translateY(${(-currentScroll / maxScroll * contentHeight)}px)`;
+
+            requestAnimationFrame(update);
+        };
+
+        update();
+    } else {
+        let documentText = [];
+
+        document.querySelectorAll('.mobile-friendly').forEach((element) => {
+            documentText.push(element.innerText);
         });
 
-        const contentHeight = document.getElementById('scrollContent').scrollHeight;
-        const maxScroll = document.documentElement.scrollHeight;
-        
-        document.getElementById('scrollContent').style.transform = `translateY(${(-currentScroll / maxScroll * contentHeight)}px)`;
-
-        requestAnimationFrame(update);
-    };
-
-    update();
+        document.body.innerText = documentText.flat().join('\n');
+    }
 });
