@@ -1,117 +1,124 @@
-const LERP = (s, e, a) => s + (e - s) * a;
+@import url('https://fonts.googleapis.com/css2?family=Inter');
 
-function isMobile() {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+* {
+    padding: 0;
+    margin: 0;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    if (isMobile()) {
-        let currentScroll = window.pageYOffset;
-        let desiredScroll = currentScroll;
-        let lastScroll = currentScroll;
+body {
+    background: rgb(24, 24, 24);
+    overflow: hidden;
+    font-family: 'Inter';
+    color: rgb(209, 209, 209);
+    /* padding: 2%; */
+}
 
-        const parallaxConfig = [
-            { sel: '.parallax-img1', spd: 0.2 },
-            { sel: '.parallax-img2', spd: 0.1 },
-            { sel: '.parallax-front1', spd: -0.1 },
-            { sel: '.parallax-front2', spd: -0.3 },
-            { sel: '.parallax-behind1', spd: 0.7 },
-            { sel: '.parallax-behind2', spd: 0.1 }
-        ];
+h1 {
+    font-size: 3em;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+    color: #fff;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: rgb(255, 255, 255);
+    margin-bottom: 5%;
+}
 
-        window.navigateToPage = (id) => {
-            const el = document.getElementById(id);
-            if (el) desiredScroll = el.offsetTop;
-        };
+h2 {
+    color: #fff;
+    font-size: 2em;
+    letter-spacing: -0.03em;
+    font-weight:100;
+    hyphens: auto;
+    line-height: 100%;
+    margin-bottom: 1em;
+}
 
-        // Cache page data
-        const pages = [];
-        const fadeEls = [];
+nav {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
 
-        document.querySelectorAll('.page-wrapper').forEach(page => {
-            const els = [];
-            parallaxConfig.forEach(({ sel, spd }) => {
-                page.querySelectorAll(sel).forEach(el => els.push({ el, spd }));
-            });
+p {
+    margin-bottom: 1em;
+    line-height: 135%;
+    font-size: 0.9em;
+}
 
-            pages.push({
-                page,
-                els,
-                getCenter: () => page.offsetTop + page.offsetHeight / 2
-            });
+p.subtext {
+    color: rgb(85, 85, 85);
+    font-size: 0.7em;
+}
 
-            const pageScrollDiv = document.getElementById('scrollContent').appendChild(document.createElement('div'));
-            pageScrollDiv.innerText = page.id;
+.page-wrapper {
+    display: grid;
+    width: 100vw;
+    padding: 4% 5% 4% 20%;
+    height: 100vh;
+    box-sizing: border-box;
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+    grid-template-rows: repeat(11, minmax(0, 1fr));
+    gap: 2%;
+}
 
-            // Cache fade elements
-            const sens = parseFloat(page.dataset.fadeSensitivity) || 1;
-            const snapDist = parseFloat(page.dataset.snapDistance) || 0;
-            fadeEls.push({ el: page, sens, snapDist, offsetTop: page.offsetTop });
-        });
+.full-size {
+    height: 100%;
+    width: 100%;
+}
 
-        const vh = window.innerHeight;
-        const vhHalf = vh / 2;
-        const snapSpeedThreshold = 0.005; // pixels per frame
+.paragraph {
+    hyphens: auto;
+    text-align: justify;
+    text-justify: inter-character;
+}
 
-        window.addEventListener('wheel', e => {
-            e.preventDefault();
-            desiredScroll = Math.max(0, Math.min(
-                desiredScroll + e.deltaY,
-                document.body.scrollHeight - vh
-            ));
-        }, { passive: false });
+.parallax-front1 {
+    z-index: 100;
+}
 
-        // Animation loop
-        const update = () => {
-            currentScroll = LERP(currentScroll, desiredScroll, 0.05);
-            window.scrollTo(0, currentScroll);
+.parallax-behind2 {
+    z-index: -10;
+}
 
-            const scrollSpeed = Math.abs(currentScroll - lastScroll);
-            lastScroll = currentScroll;
+.parallax-img1, .parallax-img2 {
+    object-fit: cover; 
+    position: absolute; 
+    background-color: red;
+    top: -25%; 
+    left: 0;
+    z-index: -1;
+    height: 160%; /* Extra height for parallax movement room */
+    width: 100%;
+}
 
-            const viewCenter = currentScroll + vhHalf;
+.scrollbar .viewport {
+    position: fixed;
+    top: 50%;
+    left: 10dvw;
+    transform: translateX(-50%) translateY(-50%);
+    height: 12dvh;
+    width: 12dvw;
+    border: 1.5px rgb(189, 189, 189) solid; 
+    z-index: 999;
+}
 
-            // Parallax
-            pages.forEach(({ els, getCenter }) => {
-                const scroll = viewCenter - getCenter();
-                els.forEach(({ el, spd }) => {
-                    el.style.transform = `translateY(${scroll * spd}px)`;
-                });
-            });
+.scrollbar #scrollContent {
+    position: fixed;
+    top: 50dvh;
+    left: 10dvw;
+    width: 12dvw;
+}
 
-            // Fade & Snap
-            fadeEls.forEach(({ el, sens, snapDist, offsetTop }) => {
-                const rect = el.getBoundingClientRect();
-                const dist = Math.abs((rect.top + rect.bottom) / 2 - vhHalf);
-                el.style.opacity = Math.max(0, 1 - dist / (vh / sens));
-
-                // Snap to section if within snap distance and moving slowly
-                if (snapDist > 0 && scrollSpeed < snapSpeedThreshold) {
-                    const distToSection = Math.abs(currentScroll - offsetTop);
-                    if (distToSection < snapDist) {
-                        desiredScroll = offsetTop;
-                    }
-                }
-            });
-
-            const contentHeight = document.getElementById('scrollContent').scrollHeight;
-            const maxScroll = document.documentElement.scrollHeight;
-
-            document.getElementById('scrollContent').style.transform = `translateY(${(-currentScroll / maxScroll * contentHeight)}px)`;
-
-            requestAnimationFrame(update);
-        };
-
-        update();
-    } else {
-
-        let documentText = [];
-
-        document.querySelectorAll('.mobile-friendly').forEach((element, index) => {
-            documentText.push(element.innerText);
-        });
-
-        document.innerText = String.apply(documentText.flat);
-
-    };
-});
+.scrollbar #scrollContent div {
+    height: 12dvh;
+    width: 12dvw;
+    transform: translateX(-50%) translateY(-50%);
+    /* background-color: rgb(34, 34, 34); */
+    border: 1.5px rgb(85, 85, 85) solid; 
+    padding: 5%;
+    font-size: 0.7em;
+    box-sizing: border-box;
+    color: rgb(85, 85, 85);
+}
