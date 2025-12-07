@@ -31,19 +31,34 @@ const DESKTOP_VERSION = event => {
         f();
     }
 
+    window.navigateTo = function (id) {
+        const element = document.getElementById(id);
+        scrollArray[1] = element.offsetTop;
+    }
+
     // events
 
     document.addEventListener('wheel', e => {
-        scrollArray[1] = Math.min(Math.max(0, scrollArray[1] + e.deltaY), PAGES_DIV.offsetHeight - window.innerHeight);
+        const maxScroll = PAGES_DIV.offsetHeight - window.innerHeight;
+        scrollArray[1] = Math.min(Math.max(0, scrollArray[1] + e.deltaY), maxScroll);
     });
 
     document.addEventListener('mousemove', e => {
-        [cursorPos[0], cursorPos[1]] = [e.clientX, e.clientY]; 
+        [cursorPos[0], cursorPos[1]] = [e.clientX, e.clientY];
     });
 
     HEARTBEAT(async () => {
+        // Cache DOM measurements
+        const winHeight = window.innerHeight;
+        const pagesHeight = PAGES_DIV.offsetHeight;
+        const scrollContentHeight = SCROLL_CONTENT_DIV.offsetHeight;
+        const scrollContentChildHeight = SCROLL_CONTENT_DIV.children[0].offsetHeight;
+        const maxScroll = pagesHeight - winHeight;
+        const viewCenter = -scrollArray[0] + winHeight / 2;
+        const viewTop = -scrollArray[0];
+        const viewBottom = viewTop + winHeight;
 
-        scrollArray[0] = LERP(scrollArray[0], -scrollArray[1], 0.1);
+        scrollArray[0] = LERP(scrollArray[0], -scrollArray[1], 0.05);
         PAGES_DIV.style.transform = 'translateY(' + scrollArray[0] + 'px)'
 
         PARALLAX_DICTIONARY.forEach(x => {
@@ -52,16 +67,24 @@ const DESKTOP_VERSION = event => {
                 Array.from(elementsOfClass).forEach(element => {
                     const pageWrapper = element.closest('.page-wrapper');
                     if (pageWrapper) {
-                        const viewCenter = -scrollArray[0] + window.innerHeight / 2;
-                        const pageCenter = pageWrapper.offsetTop + pageWrapper.offsetHeight / 2;
-                        const scroll = viewCenter - pageCenter;
-                        element.style.transform = 'translateY(' + scroll * x.speed + 'px)';
+                        const pageTop = pageWrapper.offsetTop;
+                        const pageBottom = pageTop + pageWrapper.offsetHeight;
+                        const inView = pageBottom > viewTop && pageTop < viewBottom;
+
+                        if (inView) {
+                            const pageCenter = pageTop + pageWrapper.offsetHeight / 2;
+                            const scroll = viewCenter - pageCenter;
+                            element.style.transform = 'translateY(' + scroll * x.speed + 'px)';
+                            element.style.opacity = '1';
+                        } else {
+                            element.style.opacity = '0';
+                        }
                     }
                 });
             }
         });
 
-        SCROLL_CONTENT_DIV.style.transform = 'translateX(-50%) translateY(' + scrollArray[0] / (PAGES_DIV.offsetHeight - window.innerHeight) * (SCROLL_CONTENT_DIV.offsetHeight - SCROLL_CONTENT_DIV.children[0].offsetHeight) + 'px)';
+        SCROLL_CONTENT_DIV.style.transform = 'translateX(-50%) translateY(' + scrollArray[0] / maxScroll * (scrollContentHeight - scrollContentChildHeight) + 'px)';
 
         const rect = SCROLL_CONTENT_DIV.getBoundingClientRect();
 
