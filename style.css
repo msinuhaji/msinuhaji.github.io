@@ -117,6 +117,15 @@ p.subtext {
     z-index: 999;
 }
 
+.clickable {
+    transition: transform 40ms ease-in-out;
+}
+
+.clickable:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
 #scrollContent {
     pointer-events: none;
     position: fixed;
