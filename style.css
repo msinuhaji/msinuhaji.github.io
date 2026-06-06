@@ -2,13 +2,14 @@
     font-weight: normal;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
     font-family: Arial, sans-serif;
     background-color: #111111;
     color: #fff;
-    letter-spacing: -3%;
+    letter-spacing: -4%;
 }
 
 h1 {
@@ -19,22 +20,58 @@ h2 {
     font-size: 3.5em;
 }
 
+h1, h2 {
+    line-height: 0.8;
+    margin-bottom: 0.5em;
+}
+
 p {
     font-size: 1.25em;
 }
 
-div.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20em, auto));
-    height: 30em;
-    padding: 2em;
-    gap: 20px;
-    margin-top: 20px;
+.grid .item {
+    height: 100%;
 }
 
-.grid .item {
-    background-color: #ff0000;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
+.grid .wide {
+    grid-column: span 2;
+}
+
+.grid .extrawide {
+    grid-column: span 3;
+}
+
+.grid .tall {
+    grid-row: span 2;
+}
+
+.grid .extratall {
+    grid-row: span 3;
+}   
+
+.grid .ultratall {
+    grid-row: span 5;
+}   
+
+@media screen and (width >= 600px) {
+    div.grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(15em, 1fr));
+        grid-auto-rows: 10em;
+    }
+
+    .grid .item {
+        margin-bottom: 0;
+    }
+}
+
+.nostalgic1 {
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        url('images/marissa-lewis-t63_-EHCY2o-unsplash.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+.full {
+    min-height: 100vh;
 }
