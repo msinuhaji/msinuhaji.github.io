@@ -12,6 +12,9 @@ const render = Matter.Render.create({
 const runner = Matter.Runner.create();
 let updateFunctions = [];
 
+engine.world.gravity.x = 0;   // horizontal gravity
+engine.world.gravity.y = 0.4; // vertical gravity
+
 let borders = [Matter.Bodies.rectangle(
     window.innerWidth / 2, //x centre
     window.innerHeight + 50, //y centre
@@ -23,7 +26,7 @@ Matter.Bodies.rectangle(
     window.innerWidth + 50, //x centre
     window.innerHeight / 2, //y centre
     100, //width
-    window.innerHeight * 100, //height
+    window.innerHeight * 1000, //height
     { isStatic: true, restitution: 1, friction: 1, frictionStatic: 1 }
 ),
 Matter.Bodies.rectangle(
@@ -36,7 +39,7 @@ Matter.Bodies.rectangle(
 let objects = [];
 Matter.World.add(engine.world, borders);
 
-class AssignElementToBody {
+class ElementBody {
     constructor(element, data) {
         const rect = element.getBoundingClientRect();
         this.size = [rect.width, rect.height];
@@ -47,43 +50,24 @@ class AssignElementToBody {
         // ]
 
         this.element = element;
-        if (data.shape == 'ball') {
-            this.body = Matter.Bodies.ball(
-                window.innerWidth / 2 + (Math.random() - 0.5) / 0.5 * window.innerWidth / 2, //x
-                - (Math.random() * 100 + 40), //y
-                this.size[0],
-                this.size[1],
-                {
-                    restitution: 0.4,
-                    frictionAir: 0.005,
-                    friction: 0.94,
-                    frictionStatic: 0.6,
-                    density: 0.001,
-                    render: {
-                        fillStyle: "transparent",
-                        strokeStyle: "transparent"
-                    }
-                },
-            );
-        } else {
-            this.body = Matter.Bodies.rectangle(
-                window.innerWidth / 2 + (Math.random() - 0.5) / 0.5 * window.innerWidth / 2, //x
-                - (Math.random() * 100 + 40), //y
-                this.size[0],
-                this.size[1],
-                {
-                    restitution: 0.4,
-                    frictionAir: 0.005,
-                    friction: 0.94,
-                    frictionStatic: 0.6,
-                    density: 0.001,
-                    render: {
-                        fillStyle: "transparent",
-                        strokeStyle: "transparent"
-                    }
-                },
-            );
-        }
+        this.body = Matter.Bodies.rectangle(
+            window.innerWidth / 2 + (Math.random() - 0.5) / 0.5 * window.innerWidth / 2, //x
+            - (Math.random() * 1000 + 40), //y
+            this.size[0],
+            this.size[1],
+            {
+                restitution: 0.4,
+                frictionAir: 0.005,
+                friction: 0.8,
+                frictionStatic: 0.2,
+                density: 0.006,
+                render: {
+                    fillStyle: "transparent",
+                    strokeStyle: "transparent"
+                }
+            },
+        );
+
 
         this.element.style.height = `${this.size[1]}px`;
         this.element.style.width = `${this.size[0]}px`;
@@ -109,7 +93,7 @@ Matter.Runner.run(runner, engine);
 // Convert HTMLCollection to array and create physics body for each element
 const physicalElements = Array.from(document.getElementsByClassName('physical'));
 physicalElements.forEach(element => {
-    objects.push(new AssignElementToBody(element, {}));
+    objects.push(new ElementBody(element, {}));
 });
 
 Matter.Events.on(engine, 'beforeUpdate', () => {
@@ -118,5 +102,13 @@ Matter.Events.on(engine, 'beforeUpdate', () => {
     }
 });
 
+// const clock = document.getElementById('time');
 
+// function updateClock() {
+//     const now = new Date();
 
+//     clock.textContent = now.toLocaleTimeString();
+// }
+
+// updateClock(); // run immediately
+// setInterval(updateClock, 1000);
