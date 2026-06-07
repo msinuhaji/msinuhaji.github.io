@@ -3,17 +3,18 @@
 * {
     padding: 0;
     margin: 0;
-    overflow: hidden;
     font-family: 'Sono';
     font-weight: normal;
     color: #ffffff;
     letter-spacing: -5%;
     line-height: 100%;
+    box-sizing: border-box;
 }
 
-div h1, p {
-    text-align:center;
-    justify-content:baseline;
+div h1,
+p {
+    text-align: center;
+    justify-content: baseline;
     font-size: 1.5em;
 }
 
@@ -22,19 +23,36 @@ h1 {
     font-family: 'Bitcount Grid Single';
     height: 6.5vw;
     line-height: 6.5vw;
+    text-wrap-mode: nowrap;
 }
 
 body {
-    background: rgb(19, 19, 19);
+    background: rgb(0, 0, 0);
     min-height: 100vh;
 }
 
+.full {
+    width: 100vw;
+    height: 100vh;
+}
+
 #playground {
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: relative;
     width: 100%;
-    height: 100%;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.parallax-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.video-wrapper {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
     z-index: 0;
 }
 
@@ -43,8 +61,18 @@ body {
     inset: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
+    z-index: 2;
     pointer-events: none;
+}
+
+.bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.5) blur(10px);
+    z-index: 0;
 }
 
 .physical {
@@ -56,7 +84,7 @@ body {
     margin: 0;
     top: 0;
     left: 0;
-    z-index: 1;
+    z-index: 3;
     pointer-events: auto;
 }
 
@@ -68,24 +96,17 @@ body {
 }
 
 .physical a {
-  pointer-events: auto;
+    pointer-events: auto;
 }
 
 header {
     top: 0;
     left: 0;
-    position: absolute;
+    position: fixed;
     display: flex;
     gap: 0.5em;
     padding: 0.5em;
     height: 2em;
     width: 100%;
-}
-
-.bg-video {
-  position: fixed;
-  inset: 0;
-  object-fit: cover;
-  filter: brightness(0.5) blur(10px);
-  z-index: -1;
+    z-index: 10;
 }

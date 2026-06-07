@@ -1,42 +1,17 @@
 //simplify, improve mobile support later
 
-const engine = Matter.Engine.create();
-const render = Matter.Render.create({
-    element: document.getElementById('playground'),
-    engine: engine,
-    options: {
-        width: window.innerWidth,
-        height: window.innerHeight,
-        wireframes: false,
-        background: 'transparent'
+const playground = document.getElementById('playground');
+const physicalBodyAttributes = {
+    restitution: 0.5,
+    frictionAir: 0.015,
+    friction: 0.9,
+    frictionStatic: 0.2,
+    density: 0.016,
+    render: {
+        fillStyle: "transparent",
+        strokeStyle: "transparent"
     }
-});
-const runner = Matter.Runner.create();
-let updateFunctions = [];
-
-let borders = [Matter.Bodies.rectangle(
-    window.innerWidth / 2, //x centre
-    window.innerHeight + 50, //y centre
-    window.innerWidth, //width
-    100, //height
-    { isStatic: true, restitution: 1, friction: 1, frictionStatic: 1 }
-),
-Matter.Bodies.rectangle(
-    window.innerWidth + 50, //x centre
-    window.innerHeight / 2, //y centre
-    100, //width
-    window.innerHeight * 1000, //height
-    { isStatic: true, restitution: 1, friction: 1, frictionStatic: 1 }
-),
-Matter.Bodies.rectangle(
-    -50, //x centre
-    window.innerHeight / 2, //y centre
-    100, //width
-    window.innerHeight * 100, //height
-    { isStatic: true, restitution: 1, friction: 1, frictionStatic: 1 }
-)];
-let objects = [];
-Matter.World.add(engine.world, borders);
+}
 
 function makeStarVertices(radius, innerRadius, points = 5) {
     const vertices = [];
@@ -61,8 +36,90 @@ function makeStarClipPath(outerRadius, innerRadius, points = 5) {
     return `polygon(${path.join(', ')})`;
 }
 
-class ElementBody {
-    constructor(element, data = {}) {
+class PhysicalSystem {
+    constructor(element) {
+        //primary setup
+        this.playground = element;
+        this.engine = Matter.Engine.create() // create the engine
+        this.runner = Matter.Runner.create() // create the runner
+        this.render = Matter.Render.create({ // create the render
+            element: this.playground,
+            engine: this.engine,
+            options: {
+                width: this.playground.clientWidth || window.innerWidth,
+                height: this.playground.clientHeight || window.innerHeight,
+                wireframes: false,
+                background: 'transparent'
+            }
+        })
+
+        //secondary setup
+        this.objects = []
+        this.updateFunctions = [];
+
+        const w = this.render.options.width;
+        const h = this.render.options.height;
+        this.borders = [
+            Matter.Bodies.rectangle(
+                w / 2,
+                h + 50,
+                w,
+                100,
+                { isStatic: true, restitution: 1, friction: 1, frictionStatic: 1 }
+            ),
+            Matter.Bodies.rectangle(
+                w + 50,
+                h / 2,
+                100,
+                h * 1000,
+                { isStatic: true, restitution: 1, friction: 1, frictionStatic: 1 }
+            ),
+            Matter.Bodies.rectangle(
+                -50,
+                h / 2,
+                100,
+                h * 1000,
+                { isStatic: true, restitution: 1, friction: 1, frictionStatic: 1 }
+            )
+        ];
+        Matter.World.add(this.engine.world, this.borders);
+
+        Matter.Events.on(this.engine, 'beforeUpdate', () => {
+            for (let i = 0; i < this.updateFunctions.length; i++) {
+                this.updateFunctions[i]();
+            }
+        });
+
+        window.addEventListener('resize', () => this.updateBounds());
+        window.addEventListener('scroll', () => this.updateBounds());
+    }
+
+    updateBounds() {
+        const rect = this.playground.getBoundingClientRect();
+        const width = rect.width || window.innerWidth;
+        const height = rect.height || window.innerHeight;
+
+        this.render.canvas.width = width;
+        this.render.canvas.height = height;
+        this.render.options.width = width;
+        this.render.options.height = height;
+
+        Matter.Body.setPosition(this.borders[0], { x: width / 2, y: height + 50 });
+        Matter.Body.setPosition(this.borders[1], { x: width + 50, y: height / 2 });
+        Matter.Body.setPosition(this.borders[2], { x: -50, y: height / 2 });
+    }
+
+    run() {
+        Matter.Render.run(this.render);
+        Matter.Runner.run(this.runner, this.engine);
+    }
+}
+
+class PhysicalBody {
+    constructor(system, element, data = {}) {
+        this.system = system;
+        this.element = element;
+
         const rect = element.getBoundingClientRect();
         let width = rect.width;
         let height = rect.height;
@@ -73,25 +130,13 @@ class ElementBody {
             x: dataset.x !== undefined ? Number(dataset.x) : undefined,
             y: dataset.y !== undefined ? Number(dataset.y) : undefined
         };
-        const startX = position?.x ?? window.innerWidth / 2 + (Math.random() - 0.5) * window.innerWidth / 2;
+        const startX = position?.x ?? (this.system.render.options.width / 2 + (Math.random() - 0.5) * this.system.render.options.width / 2);
         const startY = position?.y ?? - (Math.random() * 1000 + 40);
-
-        this.element = element;
 
         if (shape === 'circle' || shape === 'ball') {
             const radius = data.radius || (dataset.radius ? Number(dataset.radius) : Math.min(width, height) / 2);
             width = height = radius * 2;
-            this.body = Matter.Bodies.circle(startX, startY, radius, {
-                restitution: 0.8,
-                frictionAir: 0.005,
-                friction: 0.8,
-                frictionStatic: 0.2,
-                density: 0.006,
-                render: {
-                    fillStyle: "transparent",
-                    strokeStyle: "transparent"
-                }
-            });
+            this.body = Matter.Bodies.circle(startX, startY, radius, physicalBodyAttributes);
             this.element.style.borderRadius = '50%';
         } else if (shape === 'star') {
             const outerRadius = data.radius || (dataset.radius ? Number(dataset.radius) : Math.min(width, height) / 2);
@@ -99,42 +144,23 @@ class ElementBody {
             const points = data.points || (dataset.points ? Number(dataset.points) : 5);
             const vertices = makeStarVertices(outerRadius, innerRadius, points);
             width = height = outerRadius * 2;
-            this.body = Matter.Bodies.fromVertices(startX, startY, [vertices], {
-                restitution: 0.5,
-                frictionAir: 0.005,
-                friction: 0.8,
-                frictionStatic: 0.2,
-                density: 0.016,
-                render: {
-                    fillStyle: "transparent",
-                    strokeStyle: "transparent"
-                }
-            }, true);
+            this.body = Matter.Bodies.fromVertices(startX, startY, [vertices], physicalBodyAttributes, true);
             const clipPath = makeStarClipPath(outerRadius, innerRadius, points);
             this.element.style.clipPath = clipPath;
             this.element.style.webkitClipPath = clipPath;
         } else {
-            this.body = Matter.Bodies.rectangle(startX, startY, width, height, {
-                restitution: 0.3,
-                frictionAir: 0.005,
-                friction: 0.8,
-                frictionStatic: 0.2,
-                density: 0.006,
-                render: {
-                    fillStyle: "transparent",
-                    strokeStyle: "transparent"
-                }
-            });
+            this.body = Matter.Bodies.rectangle(startX, startY, width, height, physicalBodyAttributes);
         }
 
         this.size = [width, height];
         this.element.style.height = `${height}px`;
         this.element.style.width = `${width}px`;
 
-        Matter.World.add(engine.world, this.body);
+        Matter.World.add(this.system.engine.world, this.body);
         Matter.Body.setAngularVelocity(this.body, (Math.random() - 0.5) / 0.05 * 0.001);
-        Matter.Body.setVelocity(this.body, { x: (Math.random() - 0.5) * 10, y: (Math.random() - 0.5) * 40 });
-        updateFunctions.push(() => this.update());
+        Matter.Body.setVelocity(this.body, { x: (Math.random() - 0.5) * 50, y: (Math.random() - 0.5) * 10 });
+        this.system.updateFunctions.push(() => this.update());
+        this.system.objects.push(this);
     }
 
     update() {
@@ -146,9 +172,7 @@ class ElementBody {
     }
 }
 
-Matter.Render.run(render);
-Matter.Runner.run(runner, engine);
-
+const ps = new PhysicalSystem(playground)
 // Convert HTMLCollection to array and create physics body for each element
 const physicalElements = Array.from(document.getElementsByClassName('physical'));
 physicalElements.forEach(element => {
@@ -163,14 +187,10 @@ physicalElements.forEach(element => {
         } : undefined
     };
 
-    objects.push(new ElementBody(element, data));
+    new PhysicalBody(ps, element, data);
 });
 
-Matter.Events.on(engine, 'beforeUpdate', () => {
-    for (let i = 0; i < updateFunctions.length; i++) {
-        updateFunctions[i]();
-    }
-});
+ps.run();
 
 // const clock = document.getElementById('time');
 
