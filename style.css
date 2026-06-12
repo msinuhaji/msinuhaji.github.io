@@ -33,13 +33,13 @@ body {
 
 .full {
     width: 100vw;
-    height: 100vh;
+    height: 90vh;
 }
 
 #playground {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     overflow: hidden;
     z-index: 2;
 }

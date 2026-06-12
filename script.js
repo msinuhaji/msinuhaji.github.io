@@ -51,7 +51,9 @@ class PhysicalSystem {
                 wireframes: false,
                 background: 'transparent'
             }
-        })
+        });
+
+        console.log(this.playground.clientHeight);
 
         //secondary setup
         this.objects = []
@@ -59,6 +61,7 @@ class PhysicalSystem {
 
         const w = this.render.options.width;
         const h = this.render.options.height;
+
         this.borders = [
             Matter.Bodies.rectangle(
                 w / 2,
@@ -82,6 +85,7 @@ class PhysicalSystem {
                 { isStatic: true, restitution: 1, friction: 1, frictionStatic: 1 }
             )
         ];
+
         Matter.World.add(this.engine.world, this.borders);
 
         Matter.Events.on(this.engine, 'beforeUpdate', () => {
@@ -91,7 +95,6 @@ class PhysicalSystem {
         });
 
         window.addEventListener('resize', () => this.updateBounds());
-        window.addEventListener('scroll', () => this.updateBounds());
     }
 
     updateBounds() {
@@ -99,14 +102,24 @@ class PhysicalSystem {
         const width = rect.width || window.innerWidth;
         const height = rect.height || window.innerHeight;
 
+        Matter.Body.setPosition(this.borders[0], { x: width / 2, y: height + 50 });
+        Matter.Body.setPosition(this.borders[1], { x: width + 50, y: height / 2 });
+        Matter.Body.setPosition(this.borders[2], { x: -50, y: height / 2 });
+
+        const updatedBodyPositions = this.objects.forEach((obj) => {
+            Matter.Body.setPosition(obj.body, {
+                x: obj.body.position.x * width / this.render.canvas.width,
+                y: obj.body.position.y * height / this.render.canvas.height
+            });
+        })
+
         this.render.canvas.width = width;
         this.render.canvas.height = height;
         this.render.options.width = width;
         this.render.options.height = height;
 
-        Matter.Body.setPosition(this.borders[0], { x: width / 2, y: height + 50 });
-        Matter.Body.setPosition(this.borders[1], { x: width + 50, y: height / 2 });
-        Matter.Body.setPosition(this.borders[2], { x: -50, y: height / 2 });
+        console.log(updatedBodyPositions);
+
     }
 
     run() {
@@ -124,7 +137,8 @@ class PhysicalBody {
         let width = rect.width;
         let height = rect.height;
 
-        const dataset = element.dataset || {};
+        const dataset = element.dataset || {}; // attributes of object body
+
         const shape = data.shape || dataset.shape || 'rectangle';
         const position = data.position || {
             x: dataset.x !== undefined ? Number(dataset.x) : undefined,
@@ -133,12 +147,8 @@ class PhysicalBody {
         const startX = position?.x ?? (this.system.render.options.width / 2 + (Math.random() - 0.5) * this.system.render.options.width / 2);
         const startY = position?.y ?? - (Math.random() * 1000 + 40);
 
-        if (shape === 'circle' || shape === 'ball') {
-            const radius = data.radius || (dataset.radius ? Number(dataset.radius) : Math.min(width, height) / 2);
-            width = height = radius * 2;
-            this.body = Matter.Bodies.circle(startX, startY, radius, physicalBodyAttributes);
-            this.element.style.borderRadius = '50%';
-        } else if (shape === 'star') {
+        if (shape === 'star') {
+
             const outerRadius = data.radius || (dataset.radius ? Number(dataset.radius) : Math.min(width, height) / 2);
             const innerRadius = data.innerRadius || (dataset.innerRadius ? Number(dataset.innerRadius) : outerRadius * 0.45);
             const points = data.points || (dataset.points ? Number(dataset.points) : 5);
@@ -148,8 +158,11 @@ class PhysicalBody {
             const clipPath = makeStarClipPath(outerRadius, innerRadius, points);
             this.element.style.clipPath = clipPath;
             this.element.style.webkitClipPath = clipPath;
+
         } else {
+
             this.body = Matter.Bodies.rectangle(startX, startY, width, height, physicalBodyAttributes);
+
         }
 
         this.size = [width, height];
@@ -160,7 +173,8 @@ class PhysicalBody {
         Matter.Body.setAngularVelocity(this.body, (Math.random() - 0.5) / 0.05 * 0.001);
         Matter.Body.setVelocity(this.body, { x: (Math.random() - 0.5) * 50, y: (Math.random() - 0.5) * 10 });
         this.system.updateFunctions.push(() => this.update());
-        this.system.objects.push(this);
+
+        this.system.objects.push(this); // pushes object into object list <--- RIGHT HERE !!!
     }
 
     update() {
@@ -191,14 +205,3 @@ physicalElements.forEach(element => {
 });
 
 ps.run();
-
-// const clock = document.getElementById('time');
-
-// function updateClock() {
-//     const now = new Date();
-
-//     clock.textContent = now.toLocaleTimeString();
-// }
-
-// updateClock(); // run immediately
-// setInterval(updateClock, 1000);
