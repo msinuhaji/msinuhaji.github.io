@@ -4,43 +4,95 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    /* overflow: hidden; */
+}
+
+html,
+body {
+    min-height: 100%;
+    overscroll-behavior: none;
 }
 
 body {
     background-color: rgb(253, 253, 253);
+    color: rgb(10, 10, 10);
     font-family: Archivo;
     letter-spacing: -5%;
     line-height: 0.8;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-weight: normal;
 }
 
 .full {
     width: 100vw;
-    height: 100vh;
+    height: 90vh;
+    z-index: 1;
 }
 
 .bg-image {
     background-size: cover;
-    background-position:center center;
+    background-position: center center;
 }
 
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(10, 10%);
+    grid-template-columns: repeat(10, minmax(0, 10%));
     grid-template-rows: repeat(10, 10%);
+
 }
 
 .grid-item {
     padding: 1%;
     height: 100%;
     width: 100%;
-    /* overflow: hidden; */
 }
 
 .outline {
     border: 1px inset black;
 }
 
+.dark {
+    background-color: rgb(10, 10, 10);
+    color: rgb(253, 253, 253);
+}
+
+.bg-grid-item {
+    grid-column: 1 / 11;
+    grid-row: 1 / 11;
+    background-image: url('images/marissa-lewis-t63_-EHCY2o-unsplash.jpg');
+    opacity: 0.4;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    filter: hue-rotate(130deg);
+}
+
+.invert-filter {
+    mix-blend-mode: exclusion;
+}
+
+.lines {
+    grid-column: 1 / 11;
+    grid-row: 1/ 11;
+    background: url(images/Lines.png);
+    background-size: 100% 100%;
+    opacity: 15%;
+    z-index: -1;
+    filter: hue-rotate(180deg);
+    mix-blend-mode: exclusion;
+}
+
+.photo-parallax-item {
+    /* border-radius: 4px; */
+    box-shadow: 0em 1em 1em 0.2em rgba(0, 0, 0, 0.811);
+    grid-row: 1/11; 
+    background-size: cover;
+    background-position: center;
+}
