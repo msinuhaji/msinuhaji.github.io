@@ -32,7 +32,7 @@ h6 {
 
 .full {
     width: 100vw;
-    height: 90vh;
+    height: 100vh;
     z-index: 1;
 }
 
@@ -70,7 +70,6 @@ h6 {
     opacity: 0.4;
     background-size: cover;
     background-position: center;
-    z-index: -1;
     filter: hue-rotate(130deg);
 }
 
@@ -95,4 +94,22 @@ h6 {
     grid-row: 1/11; 
     background-size: cover;
     background-position: center;
+}
+
+header {
+    height: 5vh;
+    width: 100%;
+    top: 0;
+    background-color: rgb(10, 10, 10);
+    /* position: fixed; */
+    z-index: 999;
+    color: rgb(253, 253, 253);
+    font-size: 0..5em;
+    display: flex;
+    align-items: center;
+}
+
+.spacing {
+    opacity: 0;
+    width: 100%;
 }
