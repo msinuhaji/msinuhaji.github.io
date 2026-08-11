@@ -10,66 +10,41 @@
 </head>
 
 <body>
-    <header>Mushthafa's Portfolio; 2026</header>
-    <!-- <div class="spacing" style="height: 5vh;"></div> -->
-    <div class="full grid-container" style="padding:0%; overflow:hidden; height: 70vh;"> <!-- page 1 -->
-        <div class="grid-item bg-grid-item" data-parallax="0.5" style="transform: scale(1.2)">
-            <!-- background -->
-        </div>
-        <div class="grid-item " style="grid-column: 1/ span 4; grid-row: 1 / span 2">
-            <h2  style="font-size: 4em;">VIAM INVENIAM AUT FACIAM</h2>
-        </div>
-        <!-- <div class="grid-item" style="grid-column: 3 / span 1; grid-row: 1 / span 8; display: flex; flex-direction: column-reverse;">
-            <img src="images/Cable.png" data-parallax=-0.3 style="background-position: bottom; height: auto; width: 100%;">
-        </div> -->
-        <div class="grid-item" style="grid-column: 2/ span 4; grid-row: 3 / span 2">
-            <div >
-                <ul style="font-size: 1.5em; line-height: 1.4;">
-                    <li>about</li>
-                    <li>direction</li>
-                    <li>projects</li>
-                    <li>contact</li>
-                </ul>
+    <nav class="hoz-flex-between">
+        <a href="#about">about</a>
+        <a href="#recent">recent</a>
+        <a href="#projects">projects</a>
+    </nav>
+    <header>
+        <h1>My name is Mushthafa Sinuhaji.</h1>
+        <div class="space-4rem"></div>
+    </header>
+    <!-- about -->
+    <section id="about">
+        <div class="hoz-flex-between">
+            <div>
+                <p>Hi, it's nice to meet you.</p><br>
+                <p>I'm a high school student interested in <i>computer science</i>, <i>visual arts</i>, and <i>engineering</i>.</p><br>
+                <p>This portfolio documents my journey of hardwork, in an attempt to get into my dream university.</p>
+            </div>
+            <div>
+                <p>I've been programming for a long time—since I was 7 years old. My primary programming language is Javascript, but I'm also fluent in Python and Lua, and can operate in several other languages. (C/C++, SQL, WGSL, and Matlab, to name a few.)</p><br>
+                <p>I've made everything from neural networks, to video games, to productivity apps.</p>
+            </div>
+            <div>
+                <p>My professional email is <a href="mailto:mi.sinuhaji@gmail.com">mi.sinuhaji@gmail.com</a>. Let's get into contact and talk more.</p><br>
             </div>
         </div>
-        <div class="grid-item " style="grid-column: 6 /span 5; grid-row: 7 / span 4">
-            <h1 class="questrial-bold" data-parallax=0.3 style="font-size: 10em; -webkit-text-stroke: 2px black;">
-                Mushthafa Sinuhaji</h1>
+        <div class="hoz-flex-between feature-split">
+            <img src="images/contact-render-preview.jpg" alt="Contact render preview">
+            <div>
+                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+            </div>
         </div>
-        <div class="grid-item invert-filter"
-            style="grid-column: 1 / span 4; grid-row: 1/ 11; background: rgb(192, 255, 222);"></div>
-        <div class="grid-item invert-filter lines" data-parallax=0.4
-            style="grid-column: 1 / 11; grid-row: 1/ 11; opacity: 10%;"></div>
-        <div class="lines invert-filter" data-parallax="0.3"
-            style="transform: rotate(110deg) scale(200%); grid-column: 1 / 11; grid-row: 1 / 11"></div>>
-    </div>
-    <div class="full grid-container dark" style="padding:0%; overflow:hidden;"> <!-- page 1 -->
-        <div class="grid-item bg-grid-item" data-parallax="0.5"
-            style="transform: scale(1.2); background-image: url('images/carson-van-tol-y-RCl_SWWuo-unsplash.jpg'); filter: contrast(150%) saturate(10%); opacity: 0.6; z-index: 0;">
-            <!-- background -->
-        </div>
-        <div class="grid-item invert-filter"
-            style="grid-column: 1 / 11; grid-row: 1/ span 4; background: rgb(255, 255, 255); z-index: 10;"></div>
-        <div class="grid-item " style="grid-column: 1/ span 4; grid-row: 1 / span 2; z-index: ;">
-            <h2  style="font-size: 4em">ABOUT</h2>
-        </div>
-    </div>
-    <div class="full grid-container" style="padding:0%; overflow:hidden; height: 80vh;"> <!-- page 1 -->
-        <div class="grid-item bg-grid-item" data-parallax="0.5"
-            style="transform: scale(1.5); background-image: url('images/valerie-blanchett-5pDJmIKGb5c-unsplash.jpg'); filter: hue-rotate(320deg) saturate(80%); opacity: 0.7; z-index: 0;">
-            <!-- background -->
-        </div>
-        <div class="grid-item invert-filter"
-            style="grid-column: 1 / span 2; grid-row: 1/ 11; background: rgb(255, 255, 255); z-index: 10;"></div>
-        <div class="grid-item invert-filter"
-            style="grid-column: 6 / span 2; grid-row: 1/ 11; background: rgb(255, 255, 255); z-index: 10;"></div>
-        <div class="grid-item invert-filter"
-            style="grid-column: 9 / span 2; grid-row: 1/ 11; background: rgb(255, 255, 255); z-index: 10;"></div>
-        <div class="grid-item " style="grid-column: 3/ span 2; grid-row: 1 / span 2; opacity: 1; z-index: 1;">
-            <h2 style="font-size: 4em;">DIRECTION</h2>
-        </div>
-    </div>
-
+    </section>
+    <div id="recent"></div>
+    <!-- past projects -->
+    <div id="projects"></div>
 </body>
 
 </html>

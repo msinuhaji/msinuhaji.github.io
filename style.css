@@ -1,115 +1,105 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Domine:wght@400..700&family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Stack+Sans+Headline:wght@443&display=swap');
 
 * {
     padding: 0;
     margin: 0;
+    font-family: 'Google Sans Flex';
+    font-weight: 200;
     box-sizing: border-box;
-    /* overflow: hidden; */
 }
 
-html,
-body {
-    min-height: 100%;
-    overscroll-behavior: none;
+html {
+    scroll-behavior: smooth;
 }
 
 body {
-    background-color: rgb(253, 253, 253);
-    color: rgb(10, 10, 10);
-    font-family: Archivo;
-    letter-spacing: -5%;
-    line-height: 0.8;
+    background-color: rgb(14, 14, 14);
+    color: white;
+    padding: 1rem 1.25rem 4rem;
+    line-height: 1.6;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-weight: normal;
+a:any-link {
+    color: white;
 }
 
-.full {
-    width: 100vw;
-    height: 100vh;
-    z-index: 1;
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+    padding: 0.75rem 0;
+    background: rgba(14, 14, 14, 0.78);
+    backdrop-filter: blur(8px);
 }
 
-.bg-image {
-    background-size: cover;
-    background-position: center center;
+nav a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    text-transform: lowercase;
 }
 
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(10, minmax(0, 10%));
-    grid-template-rows: repeat(10, 10%);
-
+nav a:hover {
+    color: white;
 }
 
-.grid-item {
-    padding: 1%;
-    height: 100%;
-    width: 100%;
+h1 {
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: -0.06em;
+    max-width: 760px;
+    font-family: 'Domine';
 }
 
-.outline {
-    border: 1px inset black;
+section {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.dark {
-    background-color: rgb(10, 10, 10);
-    color: rgb(253, 253, 253);
+.hoz-flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: clamp(1.5rem, 5vw, 8rem);
+    flex-wrap: wrap;
 }
 
-.bg-grid-item {
-    grid-column: 1 / 11;
-    grid-row: 1 / 11;
-    background-image: url('images/marissa-lewis-t63_-EHCY2o-unsplash.jpg');
-    opacity: 0.4;
-    background-size: cover;
-    background-position: center;
-    filter: hue-rotate(130deg);
+.hoz-flex-between > * {
+    flex: 1 1 220px;
 }
 
-.invert-filter {
-    mix-blend-mode: exclusion;
+.feature-split {
+    margin-top: 2rem;
+    align-items: flex-start;
 }
 
-.lines {
-    grid-column: 1 / 11;
-    grid-row: 1/ 11;
-    background: url(images/Lines.png);
-    background-size: 100% 100%;
-    opacity: 15%;
-    z-index: -1;
-    filter: hue-rotate(180deg);
-    mix-blend-mode: exclusion;
+img {
+    display: block;
+    width: min(100%, 480px);
+    height: auto;
 }
 
-.photo-parallax-item {
-    /* border-radius: 4px; */
-    box-shadow: 0em 1em 1em 0.2em rgba(0, 0, 0, 0.811);
-    grid-row: 1/11; 
-    background-size: cover;
-    background-position: center;
+.space-4rem {
+    height: 4rem;
 }
 
 header {
-    height: 5vh;
     width: 100%;
-    top: 0;
-    background-color: rgb(10, 10, 10);
-    /* position: fixed; */
-    z-index: 999;
-    color: rgb(253, 253, 253);
-    font-size: 0..5em;
-    display: flex;
-    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.spacing {
-    opacity: 0;
-    width: 100%;
+@media (max-width: 640px) {
+    body {
+        padding-inline: 1rem;
+    }
+
+    nav {
+        gap: 1rem;
+    }
+
+    .space-4rem {
+        height: 2rem;
+    }
 }
