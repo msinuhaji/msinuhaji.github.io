@@ -1,105 +1,39 @@
-@import url('https://fonts.googleapis.com/css2?family=Domine:wght@400..700&family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Stack+Sans+Headline:wght@443&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Instrument+Serif:ital@0;1&display=swap');
 
 * {
     padding: 0;
     margin: 0;
-    font-family: 'Google Sans Flex';
-    font-weight: 200;
-    box-sizing: border-box;
 }
 
-html {
-    scroll-behavior: smooth;
-}
+main {
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 
-body {
-    background-color: rgb(14, 14, 14);
-    color: white;
-    padding: 1rem 1.25rem 4rem;
-    line-height: 1.6;
-}
-
-a:any-link {
-    color: white;
-}
-
-nav {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    max-width: 1200px;
-    margin: 0 auto 2rem;
-    padding: 0.75rem 0;
-    background: rgba(14, 14, 14, 0.78);
-    backdrop-filter: blur(8px);
-}
-
-nav a {
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    text-transform: lowercase;
-}
-
-nav a:hover {
-    color: white;
-}
-
-h1 {
-    font-size: clamp(3rem, 7vw, 6rem);
-    line-height: 0.95;
-    letter-spacing: -0.06em;
-    max-width: 760px;
-    font-family: 'Domine';
-}
-
-section {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.hoz-flex-between {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: clamp(1.5rem, 5vw, 8rem);
-    flex-wrap: wrap;
-}
-
-.hoz-flex-between > * {
-    flex: 1 1 220px;
-}
-
-.feature-split {
-    margin-top: 2rem;
-    align-items: flex-start;
-}
-
-img {
-    display: block;
-    width: min(100%, 480px);
-    height: auto;
-}
-
-.space-4rem {
-    height: 4rem;
 }
 
 header {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
+    margin-bottom: 3em;
 }
 
-@media (max-width: 640px) {
-    body {
-        padding-inline: 1rem;
-    }
+body {
+    font-family: 'Google Sans Flex';
+    letter-spacing: -3%;
+}
 
-    nav {
-        gap: 1rem;
-    }
+h1 {
+    font-family: "Instrument Serif", serif;
+    font-weight: normal;
+    font-size: 6em;
+    letter-spacing: -5%;
+    line-height: 100%;
+}
 
-    .space-4rem {
-        height: 2rem;
-    }
+h2 {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-weight: normal;
+    font-size: 1.5em;
+    letter-spacing: -3%;
+    line-height: 100%;
 }
