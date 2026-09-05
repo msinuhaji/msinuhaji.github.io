@@ -1,2 +1,1 @@
-# Mushthafa's Portfolio
-This project is my portfolio in order to show my projects and what I've worked on over the past decade and a half.
+I am a student researcher interested in machine learning, electrical physics, and energy-efficient engineering. My current work involves finding optimal structures and paradigms for single-application neural accelerators operating general multilayer perceptrons. I am passionate about my work, and I am continually seeking new limits to test myself against.
